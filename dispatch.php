@@ -11,7 +11,7 @@
  $sql = "SELECT patrolcar.patrolcar_id,patrolcar_status.patrolcar_status_desc FROM `patrolcar` INNER JOIN patrolcar_status ON patrolcar.patrolcar_status_id = patrolcar_status.patrolcar_status_id";
  $result = $conn->query($sql);
  $cars = [];
- while($row = $result->fetch_assoc()) {
+ while($row = $result->fetch_assoc()){
   $id = $row["patrolcar_id"];
   $status = $row["patrolcar_status_desc"]; 
   $car = ["id"=>$id, "status"=>$status];
@@ -22,8 +22,9 @@
   $btnDispatchClicked = isset($_POST["btnDispatch"]);
   $btnProcessCallClicked = isset($_POST["btnProcessCall"]);
   if($btnDispatchClicked == false && $btnProcessCallClicked == false) {
+	  header("location: logcall.php");
 }
-if($$btnDispatchCallClicked == true) {
+if($btnDispatchCallClicked == true) {
 	$insertIncidentSuccess = false;
 	$hasCarSelection = isset($_POST["cbCarSelection"]);
 	$patrolcarDispatched = [];
@@ -32,6 +33,7 @@ if($$btnDispatchCallClicked == true) {
 	$patrolcarDispatched = $_POST["cbCarSelection"];
 	$numOfPatrolCarDispatched = count($patrolcarDispatched);
 	}
+}
 	
 	$incidentStatus = 0;
 	
@@ -48,8 +50,15 @@ if($$btnDispatchCallClicked == true) {
   $descriptionOfIncident = $_POST["descriptionOfIncident"];
 	
 	$sql ="INSERT INTO `incident`( `caller_name`, `phone_number`, `incident_type_id`, `incident_location`, `incident_desc`, `incident_status_id`, `time_called`) VALUES ( '" . $callerName ."','" . $contactNo . "','". $typeOfIncident . "','". $locationOfIncident . "', '" .$descriptionOfIncident ."','". $incidentStatus . "',now())";
-	echo $sql;
-  
+	//echo $sql;
+    $conn = new mysqli(DB_SERVER,DB_USER,DB_PASSWORD,DB_DATABASE);
+    $insertIncidentSuccess = $conn->query($sql);
+    if($insertIncidentSuccess == false) {
+		echo "Error" . $sql . "<br>" . $conn->error;
+	}
+		$incidentId = mysqli_insert_id($conn);
+		echo "<br>new incident id: " . $incidentId;
+	
 ?>
 <!doctype html>
 <html>
