@@ -23,9 +23,36 @@ if($isBtnSearchClicked == true) {
             $status = ["id"=>$id, "title"=>$title];
             array_push($statuses,$status);
  }
+	
  $conn->close();
 	
 }
+
+   
+   $btnUpdateClicked = isset($_POST["btnUpdate"]);
+   if($btnUpdateClicked == true) {
+   $updateSuccess = false;   
+   $conn = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_DATABASE );  
+   $newStatusId = $_POST["carStatus"];
+   $carId = $_POST["patrolCarId"];
+	   
+   $sql = "UPDATE `patrolcar` SET `patrolcar_status_id`=" . $newStatusId . " WHERE 'patrolcar_id'='" . $carId . "'";
+   $updateSuccess = $conn->query($sql);
+   
+    if ( $updateSuccess == false ) {
+        echo "Error:" . $sql . "<br>" . $conn->error;
+  }   
+	   
+	   if($newStatusId == 4) { //Arrived
+		   $sql = "";
+           $updateSuccess = $conn->query($sql);
+   
+            if ( $updateSuccess == false ) {
+            echo "Error:" . $sql . "<br>" . $conn->error;
+  }   
+	      
+	   }
+   }
 
 ?>
 <!doctype html>
@@ -43,7 +70,7 @@ if($isBtnSearchClicked == true) {
 	include "header.php";
 	?>
   <section class="mt-3">
-    <form>
+    <form action="<?php echo htmlentities($_SERVER["PHP_SELF"]) ?>" method="post">
 	    <?php
 		   if($car != null) {
 			  echo "<div class=\"form-group row\">
@@ -63,7 +90,11 @@ if($isBtnSearchClicked == true) {
 			  ";
 			   $selected = "";
 			   foreach($statuses as $status)  {
-				   echo "<option value=\"" . $status["id"] . "\">". $status["title"] ."</option>";
+				   if($status["id"] == $car["statusid"]) {
+					   $selected = " selected=\"selected\"";
+				   }
+				   echo "<option value=\"" . $status["id"] . "\" " . $selected . ">". $status["title"] ."</option>";
+				   $selected = "";
 			   }
 			   echo 
 				  "
@@ -74,7 +105,7 @@ if($isBtnSearchClicked == true) {
 		 
               <div class=\"form-group row\">
               <div class=\"offset-sm-4 col-sm-8\">
-              <button type=\"submit\" class=\"btn btn-primary\" name=\"submit\" id=\"submit\">Update</button>
+              <button type=\"submit\" class=\"btn btn-primary\" name=\"btnUpdate\" id=\"submit\">Update</button>
               </div>
               </div>";
 		   }
