@@ -44,13 +44,44 @@ if($isBtnSearchClicked == true) {
   }   
 	   
 	   if($newStatusId == 4) { //Arrived
-		   $sql = "";
+		   $sql = "UPDATE `dispatch` SET `time_arrived` =now() WHERE time_arrived is null and `patrolcar_id` = '" . $carId . "'";
            $updateSuccess = $conn->query($sql);
    
             if ( $updateSuccess == false ) {
             echo "Error:" . $sql . "<br>" . $conn->error;
   }   
 	      
+	   }
+	   else if($newStatusId == 3) {
+		  $sql = "SELECT incident_id FROM `dispatch` WHERE time_completed is null and `patrolcar_id` = '" . $carId . "'";
+          $result = $conn->query($sql); 
+		   $incidentId =0;
+		   if($result->num_rows > 0) {
+			   if($row = $result->fetch_assoc()) {
+				   $incidentId = $row["incident_id"];
+			   }
+		   }
+		   
+		   
+		      $sql = "UPDATE `dispatch` SET `time_completed` =now() WHERE time_completed is null and `patrolcar_id` = '" . $carId . "'";
+           $updateSuccess = $conn->query($sql);
+   
+            if ( $updateSuccess == false ) {
+            echo "Error:" . $sql . "<br>" . $conn->error;
+  }   
+		   	   
+		      $sql = "UPDATE `incident` SET `incident_status_id` =3 WHERE `incident_id` = '" . $incidentId . "'";
+           $updateSuccess = $conn->query($sql);
+   
+            if ( $updateSuccess == false ) {
+            echo "Error:" . $sql . "<br>" . $conn->error;
+  }   
+	
+	   }
+	   $conn->close();
+	   
+	   if($updateSuccess == true) {
+		   header("location : search.php");
 	   }
    }
 
