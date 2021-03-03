@@ -28,7 +28,7 @@ if($isBtnSearchClicked == true) {
 	
 }
 
-   
+   $updateSuccess = false; 
    $btnUpdateClicked = isset($_POST["btnUpdate"]);
    if($btnUpdateClicked == true) {
    $updateSuccess = false;   
@@ -101,7 +101,7 @@ if($isBtnSearchClicked == true) {
 	include "header.php";
 	?>
   <section class="mt-3">
-    <form action="<?php echo htmlentities($_SERVER["PHP_SELF"]) ?>" method="post">
+    <form action="search.php" method="post">
 	    <?php
 		   if($car != null) {
 			  echo "<div class=\"form-group row\">
