@@ -101,7 +101,7 @@ if($isBtnSearchClicked == true) {
 	include "header.php";
 	?>
   <section class="mt-3">
-    <form action="search.php" method="post">
+    <form action="<?php echo htmlentities($_SERVER["PHP_SELF"]) ?>" method="post">
 	    <?php
 		   if($car != null) {
 			  echo "<div class=\"form-group row\">
