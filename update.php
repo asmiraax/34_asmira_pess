@@ -81,7 +81,7 @@ if($isBtnSearchClicked == true) {
 	   $conn->close();
 	   
 	   if($updateSuccess == true) {
-		   header("location : search.php");
+		   header("location: search.php");
 	   }
    }
 
@@ -121,7 +121,7 @@ if($isBtnSearchClicked == true) {
 			  ";
 			   $selected = "";
 			   foreach($statuses as $status)  {
-				   if($status["id"] == $car["statusid"]) {
+				   if($status["id"] == $car["statusId"]) {
 					   $selected = " selected=\"selected\"";
 				   }
 				   echo "<option value=\"" . $status["id"] . "\" " . $selected . ">". $status["title"] ."</option>";
